@@ -1,0 +1,77 @@
+﻿@model List<OnlineStoreWeb.Models.ProductModel>
+
+<div class="container mt-4">
+
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 shadow-sm">
+
+
+                    <img src="@(string.IsNullOrEmpty(item.Image)
+                             ? "https://via.placeholder.com/300x250"
+                             : item.Image)"
+                     class="card-img-top product-image">
+
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            @item.Name
+                        </h5>
+                        <p class="text-danger fw-bold">
+                            @item.Price JD
+                        </p>
+
+                        <div class="d-flex gap-2">
+
+                            <a href="/Products/Details/@item.Id"
+                               class="btn btn-outline-dark w-50 rounded-pill">
+                                Details
+                            </a>
+
+                            <a asp-controller="Products"
+                               asp-action="AddToCart"
+                               asp-route-id="@item.Id"
+                               asp-route-name="@item.Name"
+                               asp-route-price="@item.Price"
+                               class="btn btn-dark w-50 rounded-pill">
+                                Add
+                            </a>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+</div>
+
+</div>
+
+<style>
+    .product-image {
+        height: 260px;
+        object-fit: cover;
+    }
+
+    .card {
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+        transition: 0.3s;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: bold;
+        min-height: 50px;
+    }
+</style>

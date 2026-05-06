@@ -1,0 +1,103 @@
+﻿@model List<OnlineStoreWeb.Models.CartItemModel>
+
+<div class="container mt-5">
+
+    <h2 class="fw-bold mb-4">
+        Shopping Cart
+    </h2>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-dark">
+            Cart is empty
+        </div>
+    }
+    else
+    {
+        decimal total = 0;
+
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        total += item.Price * item.Qty;
+
+                        <tr>
+
+                            <td width="120">
+                                <img src="@item.Image"
+                                     style="width:100px;height:100px;object-fit:cover;border-radius:12px;">
+                            </td>
+
+                            <td>
+                                @item.Name
+                            </td>
+
+                            <td>
+                                @item.Price JD
+                            </td>
+
+                            <td>
+
+                                <div class="d-flex align-items-center gap-2">
+
+                                    <a href="/Products/DecreaseQty/@item.Id"
+                                       class="btn btn-sm btn-outline-dark">
+                                        -
+                                    </a>
+
+                                    <span class="fw-bold">
+                                        @item.Qty
+                                    </span>
+
+                                    <a href="/Products/IncreaseQty/@item.Id"
+                                       class="btn btn-sm btn-dark">
+                                        +
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+
+                            <td class="fw-bold text-danger">
+                                @(item.Price* item.Qty) JD
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="text-end mt-4">
+
+            <h3 class="fw-bold">
+                Total: <span class="text-danger">@total JD</span>
+            </h3>
+
+            <button class="btn btn-dark px-5 py-3 rounded-pill mt-3">
+                Checkout
+            </button>
+
+        </div>
+    }
+
+</div>
