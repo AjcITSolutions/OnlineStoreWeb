@@ -1,4 +1,7 @@
-﻿@model OnlineStoreWeb.Models.ProductModel
+﻿@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> Localizer
+
+@model OnlineStoreWeb.Models.ProductModel
 
 <div class="container mt-5">
 
@@ -20,21 +23,24 @@
             </h1>
 
             <h2 class="text-danger mt-3">
-                @Model.Price JD
+                @Localizer["Price"]: @Model.Price JD
             </h2>
 
             <p class="mt-4 text-muted">
 
-                Premium quality luxury product.
-                Elegant design and modern style.
+                @Model.Description
 
             </p>
+            <a asp-controller="Products"
+               asp-action="AddToCart"
+               asp-route-id="@Model.Id"
+               asp-route-name="@Model.Name"
+               asp-route-price="@Model.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+               class="btn btn-dark btn-lg mt-3 px-5">
 
-            <button class="btn btn-dark btn-lg mt-3 px-5">
+                @Localizer["AddToCart"]
 
-                Add To Cart
-
-            </button>
+            </a>
 
         </div>
 

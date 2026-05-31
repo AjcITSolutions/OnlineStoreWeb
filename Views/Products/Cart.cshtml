@@ -1,15 +1,38 @@
-﻿@model List<OnlineStoreWeb.Models.CartItemModel>
+﻿@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> Localizer
+
+
+@model List<OnlineStoreWeb.Models.CartItemModel>
 
 <div class="container mt-5">
 
     <h2 class="fw-bold mb-4">
-        Shopping Cart
+        @Localizer["ShoppingCart"]
     </h2>
 
-    @if (Model.Count == 0)
+    @if (Model == null || !Model.Any())
     {
-        <div class="alert alert-dark">
-            Cart is empty
+        <div class="text-center py-5">
+
+            <i class="bi bi-cart-x"
+               style="font-size:70px;color:#999;">
+            </i>
+
+            <h3 class="fw-bold mt-4">
+                @Localizer["Cartisempty"]
+            </h3>
+
+            <p class="text-muted">
+                لا يوجد منتجات داخل السلة
+            </p>
+
+            <a href="/"
+               class="btn btn-dark px-5 py-3 rounded-pill mt-3">
+
+                متابعة التسوق
+
+            </a>
+
         </div>
     }
     else
@@ -22,11 +45,11 @@
 
                 <thead>
                     <tr>
-                        <th>Image</th>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Qty</th>
-                        <th>Total</th>
+                        <th>@Localizer["Image"]</th>
+                        <th>@Localizer["Product"]</th>
+                        <th>@Localizer["Price"]</th>
+                        <th>@Localizer["Qty"]</th>
+                        <th>@Localizer["Total"]</th>
                     </tr>
                 </thead>
 
@@ -39,7 +62,10 @@
                         <tr>
 
                             <td width="120">
-                                <img src="@item.Image"
+                                <img src="@(string.IsNullOrEmpty(item.Image)
+                                         ? "/images/no-image.png"
+                                         : item.Image)"
+                             onerror="this.onerror=null; this.src='/images/no-image.png';"
                                      style="width:100px;height:100px;object-fit:cover;border-radius:12px;">
                             </td>
 
@@ -48,7 +74,8 @@
                             </td>
 
                             <td>
-                                @item.Price JD
+                              
+                                @item.Price.ToString("0.000") @Localizer["Currency"]
                             </td>
 
                             <td>
@@ -75,7 +102,7 @@
 
 
                             <td class="fw-bold text-danger">
-                                @(item.Price* item.Qty) JD
+                                @(item.Price* item.Qty)  @Localizer["Currency"]
                             </td>
 
                         </tr>
@@ -90,12 +117,13 @@
         <div class="text-end mt-4">
 
             <h3 class="fw-bold">
-                Total: <span class="text-danger">@total JD</span>
+                @Localizer["Total"]: <span class="text-danger">@total.ToString("0.000") @Localizer["Currency"]</span>
             </h3>
 
-            <button class="btn btn-dark px-5 py-3 rounded-pill mt-3">
-                Checkout
-            </button>
+            <a href="/Products/Checkout"
+               class="btn btn-dark px-5 py-3 rounded-pill mt-3">
+                @Localizer["Checkout"]
+            </a>
 
         </div>
     }

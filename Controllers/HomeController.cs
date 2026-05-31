@@ -1,13 +1,33 @@
+
 using Microsoft.AspNetCore.Mvc;
 using OnlineStoreWeb.Models;
 using System.Diagnostics;
 using System.Text.Json;
+using Microsoft.AspNetCore.Localization;
 
 namespace OnlineStoreWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+
+
+
+public IActionResult ChangeLanguage(string culture)
+    {
+        Response.Cookies.Append(
+            CookieRequestCultureProvider.DefaultCookieName,
+            CookieRequestCultureProvider.MakeCookieValue(
+                new RequestCulture(culture)),
+            new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddYears(1)
+            });
+
+            return RedirectToAction("Index", "Home");
+        }
+
+    private readonly ILogger<HomeController> _logger;
+
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -20,8 +40,8 @@ namespace OnlineStoreWeb.Controllers
 
             using (HttpClient client = new HttpClient())
             {
-                string apiUrl = "https://localhost:7010/api/Products";
-
+              //  string apiUrl = "https://localhost:7010/api/Products";
+                string apiUrl = "https://ataonlinestoreapi.runasp.net/api/Products";
                 var response = await client.GetAsync(apiUrl);
 
                 if (response.IsSuccessStatusCode)
@@ -55,5 +75,7 @@ namespace OnlineStoreWeb.Controllers
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             });
         }
+
+
     }
 }

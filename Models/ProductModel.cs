@@ -12,5 +12,7 @@ namespace OnlineStoreWeb.Models
         public decimal Qty { get; set; }
 
         public string Image { get; set; }
+
+        public string Description { get; set; }
     }
 }

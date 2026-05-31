@@ -1,0 +1,169 @@
+﻿@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> Localizer
+
+@model OnlineStoreWeb.Models.CheckoutModel
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger text-center">
+
+        @TempData["Error"]
+
+    </div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success text-center">
+
+        @TempData["Success"]
+
+    </div>
+}
+
+<div class="container mt-5">
+
+    <h2 class="fw-bold mb-4">
+        @Localizer["Checkout"]
+    </h2>
+
+    <form method="post">
+
+        <div class="mb-3">
+            <label>@Localizer["CustomerName"]</label>
+
+            <input asp-for="CustomerName"
+                   class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label>@Localizer["Phone"]</label>
+
+            <input asp-for="Phone"
+                   class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label>@Localizer["Address"]</label>
+
+            <textarea asp-for="Address"
+                      class="form-control"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label>@Localizer["Notes"]</label>
+
+            <textarea asp-for="Notes"
+                      class="form-control"></textarea>
+        </div>
+
+        <!-- CITY -->
+
+        <div class="mb-3">
+
+            <label>@Localizer["City"]</label>
+
+            <select asp-for="City"
+                    class="form-control"
+                    id="citySelect">
+
+                <option value="">@Localizer["SelectCity"]</option>
+                <option value="Amman">
+                    @Localizer["Amman"] - 2 @Localizer["Currency"]
+                </option>
+
+                <option value="Zarqa">
+                    @Localizer["Zarqa"] - 3 @Localizer["Currency"]
+                </option>
+
+                <option value="Irbid">
+                    @Localizer["Irbid"] - 4 @Localizer["Currency"]
+                </option>
+
+                <option value="Aqaba">
+                    @Localizer["Aqaba"] - 5 @Localizer["Currency"]
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- AREA -->
+
+        <div class="mb-3">
+
+            <label>@Localizer["Area"]</label>
+
+            <input asp-for="Area"
+                   class="form-control" />
+
+        </div>
+
+        <!-- DELIVERY FEE -->
+
+        <div class="mb-3">
+
+            <label>@Localizer["DeliveryFee"]</label>
+
+            <input type="text"
+                   id="deliveryFee"
+                   class="form-control"
+                   readonly />
+
+        </div>
+
+        <!-- DELIVERY NOTES -->
+
+        <div class="mb-3">
+
+            <label>@Localizer["DeliveryNotes"]</label>
+
+            <textarea asp-for="DeliveryNotes"
+                      class="form-control"></textarea>
+
+        </div>
+
+        <button class="btn btn-dark px-5">
+            @Localizer["PlaceOrder"]
+        </button>
+
+    </form>
+
+</div>
+
+<script>
+
+    const citySelect =
+        document.getElementById("citySelect");
+
+    const deliveryFee =
+        document.getElementById("deliveryFee");
+
+    citySelect.addEventListener("change", function () {
+
+        let fee = 0;
+
+        switch (this.value)
+        {
+            case "Amman":
+                fee = 2;
+                break;
+
+            case "Zarqa":
+                fee = 3;
+                break;
+
+            case "Irbid":
+                fee = 4;
+                break;
+
+            case "Aqaba":
+                fee = 5;
+                break;
+        }
+        deliveryFee.value = fee + ' @Html.Raw(Localizer["Currency"])';
+  
+
+    });
+
+</script>

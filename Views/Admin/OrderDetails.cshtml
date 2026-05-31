@@ -1,0 +1,317 @@
+﻿@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> Localizer
+
+@model OnlineStoreWeb.Models.OnlineOrderDetailsViewModel
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">
+            @Localizer["Order"] #@Model.Id
+        </h2>
+
+        <a asp-action="Orders"
+           class="btn btn-dark">
+
+            @Localizer["Back"]
+
+        </a>
+
+    </div>
+
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <h5 class="fw-bold mb-4">
+                @Localizer["OrderStatus"]
+            </h5>
+
+            <form method="post"
+                  asp-action="UpdateStatus">
+
+                <input type="hidden"
+                       name="id"
+                       value="@Model.Id" />
+
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="fw-bold">
+                            @Localizer["Order"]
+                        </label>
+
+                        <select name="orderStatus"
+                                class="form-control">
+
+                            <option value="Pending"
+                                    selected="@(Model.OrderStatus == "Pending")">
+                                @Localizer["Pending"]
+                            </option>
+
+                            <option value="Confirmed"
+                                    selected="@(Model.OrderStatus == "Confirmed")">
+                                @Localizer["Confirmed"]
+                            </option>
+
+                            <option value="Completed"
+                                    selected="@(Model.OrderStatus == "Completed" || Model.OrderStatus == "Delivered")">
+                                @Localizer["Completed"]
+                            </option>
+
+                            <option value="Cancelled"
+                                    selected="@(Model.OrderStatus == "Cancelled")">
+                                @Localizer["Cancelled"]
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="fw-bold">
+                            @Localizer["Payment"]
+                        </label>
+
+                        <select name="paymentStatus"
+                                class="form-control">
+
+                            <option value="Unpaid"
+                                    selected="@(Model.PaymentStatus == "Unpaid")">
+                                @Localizer["Unpaid"]
+                            </option>
+
+                            <option value="Paid"
+                                    selected="@(Model.PaymentStatus == "Paid")">
+                                @Localizer["Paid"]
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="fw-bold">
+                            @Localizer["Delivery"]
+                        </label>
+
+                        <select name="deliveryStatus"
+                                class="form-control">
+
+                            <option value="Preparing"
+                                    selected="@(Model.DeliveryStatus == "Preparing")">
+                                @Localizer["Preparing"]
+                            </option>
+
+                            <option value="Shipped"
+                                    selected="@(Model.DeliveryStatus == "Shipped")">
+                                @Localizer["Shipped"]
+                            </option>
+
+                            <option value="Delivered"
+                                    selected="@(Model.DeliveryStatus == "Delivered")">
+                                @Localizer["Delivered"]
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <button class="btn btn-dark">
+
+                    @Localizer["SaveStatus"]
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- CUSTOMER INFO -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <h5 class="fw-bold mb-4">
+                @Localizer["CustomerInformation"]
+            </h5>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="fw-bold">
+                        @Localizer["CustomerName"]
+                    </label>
+
+                    <div>
+                        @Model.CustomerName
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="fw-bold">
+                        @Localizer["Phone"]
+                    </label>
+
+                    <div>
+                        @Model.Phone
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="fw-bold">
+                        @Localizer["City"]
+                    </label>
+
+                    <div>
+                        @Model.City
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="fw-bold">
+                        @Localizer["Area"]
+                    </label>
+
+                    <div>
+                        @Model.Area
+                    </div>
+
+                </div>
+
+                <div class="col-md-12 mb-3">
+
+                    <label class="fw-bold">
+                        @Localizer["Address"]
+                    </label>
+
+                    <div>
+                        @Model.Address
+                    </div>
+
+                </div>
+
+                <div class="col-md-12 mb-3">
+
+                    <label class="fw-bold">
+                        @Localizer["Notes"]
+                    </label>
+
+                    <div>
+                        @Model.Notes
+                    </div>
+
+                </div>
+
+                <div class="col-md-12 mb-3">
+
+                    <label class="fw-bold">
+                        @Localizer["DeliveryNotes"]
+                    </label>
+
+                    <div>
+                        @Model.DeliveryNotes
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ORDER ITEMS -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <h5 class="fw-bold mb-4">
+                @Localizer["OrderItems"]
+            </h5>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered align-middle">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>@Localizer["Product"]</th>
+
+                            <th>@Localizer["Price"]</th>
+
+                            <th>@Localizer["Qty"]</th>
+
+                            <th>@Localizer["Total"]</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+
+                                <td>
+                                    @item.ProductName
+                                </td>
+
+                                <td>
+                                    @item.Price.ToString("0.000") @Localizer["Currency"]
+                                </td>
+
+                                <td>
+                                    @item.Qty
+                                </td>
+
+                                <td class="fw-bold text-danger">
+                                    @item.Total.ToString("0.000") @Localizer["Currency"]
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="text-end mt-4">
+
+                <h4 class="fw-bold text-success">
+
+                    @Localizer["Total"] :
+                    @Model.Total.ToString("0.000") @Localizer["Currency"]
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
