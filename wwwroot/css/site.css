@@ -1204,3 +1204,7 @@ html[dir="rtl"] .table {
             color: #ffffff;
         }
 
+
+.cart-badge:empty {
+    display: none;
+}

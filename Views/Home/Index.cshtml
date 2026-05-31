@@ -60,18 +60,22 @@
                
 
        
-
+                    <a href="/Products/Details/@item.Id">
                     <img src="@(string.IsNullOrEmpty(item.Image)
                          ? "/images/no-image.png"
                          : item.Image)"
                      class="card-img-top product-image"
                      alt="@item.Name"
                      onerror="this.onerror=null; this.src='/images/no-image.png';">
+                     </a>
 
                     <div class="card-body">
 
                         <h5 class="fw-bold">
+                               <a href="/Products/Details/@item.Id"
+       class="text-dark text-decoration-none">
                             @item.Name
+                               </a>
                         </h5>
 
                         <p class="text-danger fw-bold fs-5">
@@ -84,15 +88,16 @@
                                 @Localizer["Details"]
                             </a>
 
-                            <a asp-controller="Products"
-                               asp-action="AddToCart"
-                               asp-fragment="@item.Id"
-                               asp-route-id="@item.Id"
-                               asp-route-name="@item.Name"
-                               asp-route-price="@item.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"
-                               class="btn btn-dark w-50 rounded-pill">
-                                @Localizer["AddToCart"]
-                            </a>
+                        <a href="#"
+   class="btn btn-dark w-50 rounded-pill add-cart-btn"
+   data-id="@item.Id"
+   data-name="@item.Name"
+   data-price="@item.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)">
+    @Localizer["AddToCart"]
+</a>
+
+
+
 
                         </div>
 

@@ -16,12 +16,29 @@ namespace OnlineStoreWeb.Controllers
         }
 
 
+        private static List<ProductModel> _productsCache =
+    new List<ProductModel>();
+
+        private static DateTime _productsCacheTime =
+            DateTime.MinValue;
+
         public async Task<IActionResult> Index(
            string search = "",
            int categoryId = 0)
         {
             List<ProductModel> products =
                 new List<ProductModel>();
+
+
+            if (_productsCache.Any() &&
+    DateTime.Now <
+    _productsCacheTime.AddMinutes(5) &&
+    string.IsNullOrEmpty(search) &&
+    categoryId == 0)
+            {
+                return View(_productsCache);
+            }
+
 
             using (HttpClient client =
                    new HttpClient())
@@ -50,6 +67,15 @@ namespace OnlineStoreWeb.Controllers
                                 PropertyNameCaseInsensitive = true
                             }
                         );
+
+
+                    if (string.IsNullOrEmpty(search) &&
+    categoryId == 0)
+                    {
+                        _productsCache = products;
+                        _productsCacheTime = DateTime.Now;
+                    }
+
                 }
             }
 
@@ -94,9 +120,56 @@ namespace OnlineStoreWeb.Controllers
                 JsonSerializer.Serialize(cart)
             );
 
-            return Redirect(Request.Headers["Referer"].ToString());
+            return Ok();
+         //   return Redirect(Request.Headers["Referer"].ToString());
         }
 
+        [HttpPost]
+        public IActionResult AddToCartAjax([FromBody] CartItemModel item)
+        {
+            List<CartItemModel> cart = new();
+
+            var sessionCart =
+                HttpContext.Session.GetString("Cart");
+
+            if (!string.IsNullOrEmpty(sessionCart))
+            {
+                cart = JsonSerializer.Deserialize<List<CartItemModel>>
+                (
+                    sessionCart
+                );
+            }
+
+            var existingItem =
+                cart.FirstOrDefault(x => x.Id == item.Id);
+
+            if (existingItem != null)
+            {
+                existingItem.Qty++;
+            }
+            else
+            {
+                item.Qty = 1;
+
+                item.Image =
+                    "https://ataonlinestoreapi.runasp.net/api/Products/GetImage/"
+                    + item.Id;
+
+                cart.Add(item);
+            }
+
+            HttpContext.Session.SetString
+            (
+                "Cart",
+                JsonSerializer.Serialize(cart)
+            );
+
+            return Json(new
+            {
+                success = true,
+                count = cart.Sum(x => x.Qty)
+            });
+        }
         // PRODUCT DETAILS
 
         public async Task<IActionResult> Details(string id)

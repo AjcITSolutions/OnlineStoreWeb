@@ -31,16 +31,14 @@
                 @Model.Description
 
             </p>
-            <a asp-controller="Products"
-               asp-action="AddToCart"
-               asp-route-id="@Model.Id"
-               asp-route-name="@Model.Name"
-               asp-route-price="@Model.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"
-               class="btn btn-dark btn-lg mt-3 px-5">
 
-                @Localizer["AddToCart"]
-
-            </a>
+      <a href="#"
+   class="btn btn-dark w-50 rounded-pill add-cart-btn"
+   data-id="@Model.Id"
+   data-name="@Model.Name"
+   data-price="@Model.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)">
+    @Localizer["AddToCart"]
+</a>
 
         </div>
 
